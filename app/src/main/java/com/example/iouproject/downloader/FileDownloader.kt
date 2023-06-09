@@ -11,7 +11,7 @@ import java.io.File
 
 class FileDownloader (context: Context) : Downloader {
 
-    private val downloadManager = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    val downloadManager = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         context.getSystemService(DownloadManager::class.java)
     } else {
         context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
@@ -25,12 +25,10 @@ class FileDownloader (context: Context) : Downloader {
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
             .setTitle(fileName)
             .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
-
-        Log.d("Download", "filepath : $fileName")
         return downloadManager.enqueue(request)
     }
 
-    private fun parseMimeType(url: String): String {
+    fun parseMimeType(url: String): String {
         val file = File(url)
         val map = MimeTypeMap.getSingleton()
         val ext = MimeTypeMap.getFileExtensionFromUrl(file.name)
@@ -39,7 +37,7 @@ class FileDownloader (context: Context) : Downloader {
         return type;
     }
 
-    private fun getFileNameFromUri(url: String): String {
+    fun getFileNameFromUri(url: String): String {
         return url.substring( url.lastIndexOf('/')+1, url.length);
     }
 }
